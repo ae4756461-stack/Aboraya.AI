@@ -4,9 +4,10 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>أبورية - مساعدك الذكي</title>
-    <!-- Font -->
+    <!-- Cairo Font -->
     <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@300;400;600;700&display=swap" rel="stylesheet">
-    <!-- Tailwind CSS with Config -->
+    
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -18,6 +19,9 @@
                             850: '#151f2e',
                             900: '#0f172a',
                             950: '#020617',
+                        },
+                        emerald: {
+                            450: '#10b981',
                         }
                     },
                     fontFamily: {
@@ -28,25 +32,10 @@
         }
     </script>
     
-    <!-- Import Map for Modules -->
-    <script type="importmap">
-{
-  "imports": {
-    "@google/genai": "https://esm.run/@google/genai",
-    "marked": "https://esm.run/marked",
-    "react": "https://aistudiocdn.com/react@^19.2.1",
-    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
-    "react/": "https://aistudiocdn.com/react@^19.2.1/",
-    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
-    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
-    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
-    "vite": "https://aistudiocdn.com/vite@^7.2.6",
-    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1"
-  }
-}
-</script>
     <style>
         body { font-family: 'Cairo', sans-serif; }
+        
+        /* Scrollbar */
         ::-webkit-scrollbar { width: 8px; }
         ::-webkit-scrollbar-track { background: transparent; }
         ::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 4px; }
@@ -54,414 +43,31 @@
         ::-webkit-scrollbar-thumb:hover { background: #94a3b8; }
         .dark ::-webkit-scrollbar-thumb:hover { background: #475569; }
         
-        /* Markdown Styles */
-        .prose p { margin-bottom: 0.5em; }
-        .prose ul { list-style-type: disc; margin-right: 1.5em; }
-        .prose ol { list-style-type: decimal; margin-right: 1.5em; }
-        .prose pre { background: #f1f5f9; padding: 1em; border-radius: 0.5em; overflow-x: auto; direction: ltr; }
-        .dark .prose pre { background: #1e293b; border: 1px solid #334155; }
-        .prose code { font-family: monospace; background: #e2e8f0; padding: 0.2em 0.4em; border-radius: 0.3em; font-size: 0.9em; }
-        .dark .prose code { background: #334155; color: #e2e8f0; }
-        .prose strong { font-weight: 700; color: inherit; }
-        .prose a { color: #059669; text-decoration: underline; }
-        .dark .prose a { color: #34d399; }
-        
-        .fade-in { animation: fadeIn 0.4s ease-in-out; }
+        /* Animations */
         @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        .animate-fade-in { animation: fadeIn 0.4s ease-in-out; }
+        
+        @keyframes pulse-slow { 0%, 100% { opacity: 1; } 50% { opacity: .7; } }
+        .animate-pulse-slow { animation: pulse-slow 3s cubic-bezier(0.4, 0, 0.6, 1) infinite; }
     </style>
+<script type="importmap">
+{
+  "imports": {
+    "react": "https://aistudiocdn.com/react@^19.2.1",
+    "react-dom/": "https://aistudiocdn.com/react-dom@^19.2.1/",
+    "react/": "https://aistudiocdn.com/react@^19.2.1/",
+    "react-markdown": "https://aistudiocdn.com/react-markdown@^10.1.0",
+    "lucide-react": "https://aistudiocdn.com/lucide-react@^0.556.0",
+    "uuid": "https://aistudiocdn.com/uuid@^13.0.0",
+    "vite": "https://aistudiocdn.com/vite@^7.2.6",
+    "@vitejs/plugin-react": "https://aistudiocdn.com/@vitejs/plugin-react@^5.1.1",
+    "@google/genai": "https://aistudiocdn.com/@google/genai@^1.31.0"
+  }
+}
+</script>
 </head>
 <body class="bg-slate-50 dark:bg-slate-950 text-slate-900 dark:text-slate-100 h-screen flex flex-col overflow-hidden transition-colors duration-300">
-
-    <!-- Header -->
-    <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 px-4 py-3 flex items-center justify-between shadow-sm z-10 flex-shrink-0 transition-colors duration-300">
-        <div class="flex items-center gap-3">
-            <!-- Custom Logo AR (Abo Raya) -->
-            <div class="w-11 h-11 bg-slate-900 dark:bg-white rounded-xl flex items-center justify-center text-white dark:text-slate-900 shadow-md relative overflow-hidden group">
-                <div class="absolute inset-0 bg-gradient-to-br from-emerald-500 to-teal-700 opacity-90 group-hover:opacity-100 transition-opacity"></div>
-                <svg viewBox="0 0 100 100" class="w-full h-full relative z-10 p-2" fill="currentColor">
-                    <path d="M50 20 L75 80 H65 L58 60 H42 L35 80 H25 L50 20 Z M50 35 L45 52 H55 L50 35 Z" fill="white" />
-                    <path d="M60 55 C75 55 85 60 85 70 C85 80 75 85 60 85 H50 V55 H60 Z M60 77 C68 77 75 75 75 70 C75 65 68 63 60 63 H58 V77 H60 Z" fill="white" />
-                </svg>
-            </div>
-            <div>
-                <h1 class="font-bold text-xl text-slate-800 dark:text-white leading-tight tracking-wide" style="font-family: 'Arial', sans-serif;">ABORAYA</h1>
-                <p class="text-xs text-slate-500 dark:text-slate-400 font-medium font-cairo">مساعدك الذكي المخلص</p>
-            </div>
-        </div>
-        
-        <div class="flex items-center gap-2">
-            <!-- Theme Toggle -->
-            <button id="theme-toggle" class="p-2.5 text-slate-500 dark:text-slate-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-full transition-all" title="تغيير المظهر">
-                <!-- Sun Icon -->
-                <svg id="sun-icon" class="hidden dark:block" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-                <!-- Moon Icon -->
-                <svg id="moon-icon" class="block dark:hidden" xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
-            </button>
-
-            <button id="reset-btn" class="p-2.5 text-slate-500 dark:text-slate-400 hover:text-emerald-600 dark:hover:text-emerald-400 hover:bg-emerald-50 dark:hover:bg-emerald-900/30 rounded-full transition-all" title="محادثة جديدة">
-                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"/><path d="M21 3v5h-5"/><path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"/><path d="M8 16H3v5"/></svg>
-            </button>
-        </div>
-    </header>
-
-    <!-- Chat Area -->
-    <main id="chat-container" class="flex-1 overflow-y-auto p-4 md:p-6 bg-slate-50 dark:bg-slate-950 relative transition-colors duration-300">
-        <div id="messages-list" class="max-w-3xl mx-auto space-y-6 pb-4 min-h-full flex flex-col">
-            
-            <!-- Empty State / Welcome Screen -->
-            <div id="welcome-screen" class="flex flex-col items-center justify-center flex-grow py-10 text-center fade-in">
-                <div class="w-24 h-24 bg-gradient-to-br from-emerald-100 to-teal-50 dark:from-emerald-900/40 dark:to-slate-800 rounded-full flex items-center justify-center mb-6 shadow-sm ring-1 ring-slate-100 dark:ring-slate-800">
-                   <!-- Large Logo for Welcome -->
-                   <svg viewBox="0 0 100 100" class="w-14 h-14 text-emerald-600 dark:text-emerald-400" fill="currentColor">
-                        <path d="M50 20 L75 80 H65 L58 60 H42 L35 80 H25 L50 20 Z M50 35 L45 52 H55 L50 35 Z" />
-                        <path d="M60 55 C75 55 85 60 85 70 C85 80 75 85 60 85 H50 V55 H60 Z M60 77 C68 77 75 75 75 70 C75 65 68 63 60 63 H58 V77 H60 Z" />
-                    </svg>
-                </div>
-                <h2 class="text-3xl font-bold text-slate-800 dark:text-white mb-3 font-cairo">منور يا غالي!</h2>
-                <p class="text-slate-500 dark:text-slate-400 max-w-md text-lg mb-8">
-                    أنا "أبورية" (ABORAYA)، مساعدك الشخصي. جاهز أساعدك في أي حاجة، سواء شغل، برمجة، أو حتى دردشة.
-                </p>
-
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 w-full max-w-2xl px-2">
-                    <!-- Suggestions -->
-                    <button class="suggestion-btn flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-400 dark:hover:border-emerald-500 hover:shadow-md hover:bg-emerald-50/30 dark:hover:bg-slate-800 transition-all text-right group cursor-pointer" data-text="اقترح عليا فكرة مشروع صغير ومربح من البيت">
-                        <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M15 14c.2-1 .7-1.7 1.5-2.5 1-.9 1.5-2.2 1.5-3.5A6 6 0 0 0 6 8c0 1 .2 2.2 1.5 3.5.7.7 1.3 1.5 1.5 2.5"/><path d="M9 18h6"/><path d="M10 22h4"/></svg>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <span class="font-bold text-slate-700 dark:text-slate-200 text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-400">أفكار جديدة</span>
-                            <span class="text-slate-500 dark:text-slate-400 text-xs mt-1 text-right line-clamp-1">اقترح فكرة مشروع</span>
-                        </div>
-                    </button>
-
-                    <button class="suggestion-btn flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-400 dark:hover:border-emerald-500 hover:shadow-md hover:bg-emerald-50/30 dark:hover:bg-slate-800 transition-all text-right group cursor-pointer" data-text="عندي كود React مش شغال، ممكن تساعدني أكتشف الغلطة؟">
-                        <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="16 18 22 12 16 6"/><polyline points="8 6 2 12 8 18"/></svg>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <span class="font-bold text-slate-700 dark:text-slate-200 text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-400">تصحيح كود</span>
-                            <span class="text-slate-500 dark:text-slate-400 text-xs mt-1 text-right line-clamp-1">ساعدني في البرمجة</span>
-                        </div>
-                    </button>
-
-                    <button class="suggestion-btn flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-400 dark:hover:border-emerald-500 hover:shadow-md hover:bg-emerald-50/30 dark:hover:bg-slate-800 transition-all text-right group cursor-pointer" data-text="اكتب إيميل رسمي لمديري بطلب فيه إجازة يومين">
-                        <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19 7-7 3 3-7 7-3-3z"/><path d="m18 13-1.5-7.5L2 2l3.5 14.5L13 18l5-5z"/><path d="m2 2 7.586 7.586"/><circle cx="11" cy="11" r="2"/></svg>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <span class="font-bold text-slate-700 dark:text-slate-200 text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-400">كتابة إيميل</span>
-                            <span class="text-slate-500 dark:text-slate-400 text-xs mt-1 text-right line-clamp-1">طلب إجازة رسمي</span>
-                        </div>
-                    </button>
-
-                    <button class="suggestion-btn flex items-center gap-4 p-4 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-xl hover:border-emerald-400 dark:hover:border-emerald-500 hover:shadow-md hover:bg-emerald-50/30 dark:hover:bg-slate-800 transition-all text-right group cursor-pointer" data-text="إزاي أقدر أنظم وقتي وأزود إنتاجيتي في الشغل؟">
-                        <div class="w-10 h-10 rounded-full bg-slate-100 dark:bg-slate-800 text-slate-600 dark:text-slate-300 flex-shrink-0 flex items-center justify-center group-hover:bg-emerald-600 group-hover:text-white transition-colors">
-                            <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polygon points="16.24 7.76 14.12 14.12 7.76 16.24 9.88 9.88 16.24 7.76"/></svg>
-                        </div>
-                        <div class="flex flex-col items-start">
-                            <span class="font-bold text-slate-700 dark:text-slate-200 text-sm group-hover:text-emerald-700 dark:group-hover:text-emerald-400">نصيحة عامة</span>
-                            <span class="text-slate-500 dark:text-slate-400 text-xs mt-1 text-right line-clamp-1">تنظيم الوقت</span>
-                        </div>
-                    </button>
-                </div>
-            </div>
-
-            <!-- Messages will be injected here -->
-        </div>
-    </main>
-
-    <!-- Input Area -->
-    <div class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 p-4 flex-shrink-0 transition-colors duration-300">
-        <div class="max-w-3xl mx-auto relative">
-            <form id="chat-form" class="relative flex items-end gap-2 bg-slate-100 dark:bg-slate-800 rounded-3xl p-2 border border-slate-300 dark:border-slate-700 focus-within:border-emerald-500 dark:focus-within:border-emerald-500 focus-within:ring-1 focus-within:ring-emerald-500 transition-all">
-                <textarea 
-                    id="user-input"
-                    rows="1"
-                    placeholder="اكتب رسالتك لأبورية هنا..."
-                    class="w-full bg-transparent border-none focus:ring-0 resize-none py-3 px-4 max-h-[150px] text-slate-800 dark:text-slate-100 placeholder-slate-400 dark:placeholder-slate-500 text-base focus:outline-none"
-                    dir="auto"
-                ></textarea>
-                <button 
-                    type="submit"
-                    id="send-btn"
-                    disabled
-                    class="p-3 rounded-full flex-shrink-0 transition-colors bg-slate-300 dark:bg-slate-700 text-slate-500 dark:text-slate-400 cursor-not-allowed"
-                >
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="m22 2-7 20-4-9-9-4Z"/><path d="M22 2 11 13"/></svg>
-                </button>
-            </form>
-            <div class="text-center mt-2 text-xs text-slate-400 dark:text-slate-500">
-                أبورية ممكن يغلط، راجع المعلومات المهمة.
-            </div>
-        </div>
-    </div>
-
-    <!-- Application Logic -->
-    <script type="module">
-        import { GoogleGenAI } from "@google/genai";
-        import { marked } from "marked";
-
-        // ==========================================
-        // ⚙️ إعدادات المفتاح (مهم جداً)
-        // ==========================================
-        // استبدل النص اللي تحت بمفتاح الـ API الخاص بيك
-        const API_KEY = ""; 
-        // ==========================================
-
-        const SYSTEM_INSTRUCTION = `
-أنت مساعد ذكي داخل تطبيق باسم "ABORAYA" (أبورية).
-دورك هو أنك تساعد المستخدم في أي شيء يحتاجه بطريقة بسيطة، محترمة، وسريعة.
-قدّم إجابات واضحة ومباشرة، وابتعد عن التعقيد.
-لو المستخدم طلب كتابة محتوى، كود، نصيحة، أو معلومة — اعملها فورًا.
-
-مميزات المساعد أبورية:
-1. يجاوب باللهجة المصرية لو المستخدم اتكلم مصري.
-2. يدي حلول بسيطة وسهلة لأي مشكلة.
-3. يتجنب الكلام غير اللائق أو المسيء.
-4. دايمًا يقترح طرق بديلة لو حاجة مش مسموح بيها أو خطأ.
-5. يحافظ على أسلوب محترم وهادئ.
-
-مهمتك:
-- ساعد المستخدم مهما كان طلبه (كتابة – بحث – كود – أفكار – تلخيص – ترجمة – اقتراحات).
-- لو المستخدم مش فاهم حاجة، اشرحها له ببساطة.
-- خلي أسلوبك خفيف وسهل زي مساعد شخصي.
-
-ابدأ كل إجابة بطريقة ود friendly وبعدين ادخل في الحل مباشرة.
-        `;
-
-        // Theme Toggle Logic
-        const themeToggleBtn = document.getElementById('theme-toggle');
-        const htmlElement = document.documentElement;
-
-        // Check local storage or system preference
-        if (localStorage.theme === 'dark' || (!('theme' in localStorage) && window.matchMedia('(prefers-color-scheme: dark)').matches)) {
-            htmlElement.classList.add('dark');
-        } else {
-            htmlElement.classList.remove('dark');
-        }
-
-        themeToggleBtn.addEventListener('click', () => {
-            htmlElement.classList.toggle('dark');
-            if (htmlElement.classList.contains('dark')) {
-                localStorage.theme = 'dark';
-            } else {
-                localStorage.theme = 'light';
-            }
-        });
-
-        // DOM Elements
-        const welcomeScreen = document.getElementById('welcome-screen');
-        const messagesList = document.getElementById('messages-list');
-        const chatForm = document.getElementById('chat-form');
-        const userInput = document.getElementById('user-input');
-        const sendBtn = document.getElementById('send-btn');
-        const resetBtn = document.getElementById('reset-btn');
-        const chatContainer = document.getElementById('chat-container');
-
-        let chat = null;
-        let ai = null;
-        let isGenerating = false;
-
-        // Initialize Gemini
-        function initGemini() {
-            if (API_KEY === "YOUR_API_KEY_HERE" || !API_KEY) {
-                appendMessage('model', '⚠️ من فضلك قم بتعديل ملف index.html وضع مفتاح API الخاص بك في المتغير API_KEY في السطر رقم 204 تقريباً.');
-                return false;
-            }
-            try {
-                ai = new GoogleGenAI({ apiKey: API_KEY });
-                chat = ai.chats.create({
-                    model: 'gemini-2.5-flash',
-                    config: {
-                        systemInstruction: SYSTEM_INSTRUCTION,
-                        temperature: 0.7,
-                    },
-                });
-                return true;
-            } catch (error) {
-                console.error("Error initializing Gemini:", error);
-                appendMessage('model', 'حدث خطأ أثناء تهيئة المساعد.');
-                return false;
-            }
-        }
-
-        // --- UI Functions ---
-
-        function scrollToBottom() {
-            chatContainer.scrollTo({ top: chatContainer.scrollHeight, behavior: 'smooth' });
-        }
-
-        function createMessageElement(role, content, isError = false) {
-            const isUser = role === 'user';
-            const div = document.createElement('div');
-            div.className = `flex w-full mb-4 ${isUser ? 'justify-start' : 'justify-end'} fade-in`;
-            
-            // Bot Avatar SVG (Logo AR)
-            const botAvatar = `
-            <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-600 dark:bg-emerald-500 text-white flex items-center justify-center p-1">
-                 <svg viewBox="0 0 100 100" class="w-full h-full" fill="currentColor">
-                    <path d="M50 20 L75 80 H65 L58 60 H42 L35 80 H25 L50 20 Z M50 35 L45 52 H55 L50 35 Z" />
-                    <path d="M60 55 C75 55 85 60 85 70 C85 80 75 85 60 85 H50 V55 H60 Z M60 77 C68 77 75 75 75 70 C75 65 68 63 60 63 H58 V77 H60 Z" />
-                </svg>
-            </div>`;
-
-            // User Avatar SVG
-            const userAvatar = `
-            <div class="flex-shrink-0 w-8 h-8 rounded-full bg-blue-600 text-white flex items-center justify-center">
-                <svg xmlns="http://www.w3.org/2000/svg" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21v-2a4 4 0 0 0-4-4H9a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>
-            </div>`;
-
-            const innerHtml = `
-                <div class="flex max-w-[85%] md:max-w-[70%] ${isUser ? 'flex-row' : 'flex-row-reverse'} gap-3">
-                    ${isUser ? userAvatar : botAvatar}
-                    <div class="px-4 py-3 rounded-2xl shadow-sm text-sm md:text-base leading-relaxed overflow-hidden ${
-                        isUser 
-                        ? 'bg-blue-600 text-white rounded-tr-none whitespace-pre-wrap' 
-                        : `bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 text-slate-800 dark:text-slate-200 rounded-tl-none prose prose-sm md:prose-base prose-slate dark:prose-invert max-w-none rtl:prose-p:text-right rtl:prose-headings:text-right`
-                    } ${isError ? 'bg-red-50 dark:bg-red-900/20 border-red-200 dark:border-red-800 text-red-600 dark:text-red-400' : ''}">
-                        ${isUser ? content : marked.parse(content)}
-                    </div>
-                </div>
-            `;
-            div.innerHTML = innerHtml;
-            return div;
-        }
-
-        function appendMessage(role, content, isError = false) {
-            // Hide welcome screen on first message
-            if (welcomeScreen.style.display !== 'none') {
-                welcomeScreen.style.display = 'none';
-            }
-            const msgEl = createMessageElement(role, content, isError);
-            messagesList.appendChild(msgEl);
-            scrollToBottom();
-            return msgEl; 
-        }
-
-        function showLoading() {
-            const div = document.createElement('div');
-            div.id = 'loading-indicator';
-            div.className = "flex w-full justify-end fade-in mb-4";
-            div.innerHTML = `
-                 <div class="flex max-w-[85%] flex-row-reverse gap-3">
-                    <div class="flex-shrink-0 w-8 h-8 rounded-lg bg-emerald-600 dark:bg-emerald-500 text-white flex items-center justify-center p-1">
-                       <svg viewBox="0 0 100 100" class="w-full h-full" fill="currentColor">
-                            <path d="M50 20 L75 80 H65 L58 60 H42 L35 80 H25 L50 20 Z M50 35 L45 52 H55 L50 35 Z" />
-                            <path d="M60 55 C75 55 85 60 85 70 C85 80 75 85 60 85 H50 V55 H60 Z M60 77 C68 77 75 75 75 70 C75 65 68 63 60 63 H58 V77 H60 Z" />
-                        </svg>
-                    </div>
-                    <div class="px-4 py-3 bg-white dark:bg-slate-900 border border-slate-200 dark:border-slate-800 rounded-2xl rounded-tl-none shadow-sm flex items-center">
-                      <svg class="animate-spin -ml-1 mr-3 h-5 w-5 text-emerald-600 dark:text-emerald-500 ml-2" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
-                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
-                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
-                      </svg>
-                      <span class="text-slate-500 dark:text-slate-400 text-sm">أبورية بيفكر...</span>
-                    </div>
-                 </div>
-            `;
-            messagesList.appendChild(div);
-            scrollToBottom();
-        }
-
-        function removeLoading() {
-            const loader = document.getElementById('loading-indicator');
-            if (loader) loader.remove();
-        }
-
-        async function handleSendMessage(message) {
-            if (!message.trim() || isGenerating) return;
-            
-            // 1. Initialize logic if needed
-            if (!chat) {
-                const success = initGemini();
-                if (!success) return;
-            }
-
-            // 2. Add User Message
-            appendMessage('user', message);
-            userInput.value = '';
-            userInput.style.height = 'auto';
-            updateButtonState();
-            isGenerating = true;
-
-            // 3. Show Loading
-            showLoading();
-
-            try {
-                // 4. API Call
-                let accumulatedText = "";
-                // Create a container for the streaming bot response immediately
-                removeLoading(); 
-                const botMsgContainer = appendMessage('model', '...');
-                const contentDiv = botMsgContainer.querySelector('.prose');
-
-                const result = await chat.sendMessageStream({ message });
-                
-                for await (const chunk of result) {
-                    if (chunk.text) {
-                        accumulatedText += chunk.text;
-                        contentDiv.innerHTML = marked.parse(accumulatedText);
-                        scrollToBottom();
-                    }
-                }
-
-            } catch (error) {
-                console.error(error);
-                removeLoading();
-                appendMessage('model', 'عذراً يا صاحبي، حصلت مشكلة صغيرة. تأكد من الإنترنت أو مفتاح الـ API.', true);
-            } finally {
-                isGenerating = false;
-                updateButtonState();
-            }
-        }
-
-        // --- Event Listeners ---
-
-        function updateButtonState() {
-            const hasText = userInput.value.trim().length > 0;
-            if (hasText && !isGenerating) {
-                sendBtn.disabled = false;
-                sendBtn.classList.remove('bg-slate-300', 'dark:bg-slate-700', 'text-slate-500', 'dark:text-slate-400', 'cursor-not-allowed');
-                sendBtn.classList.add('bg-emerald-600', 'text-white', 'hover:bg-emerald-700', 'shadow-md');
-            } else {
-                sendBtn.disabled = true;
-                sendBtn.classList.add('bg-slate-300', 'dark:bg-slate-700', 'text-slate-500', 'dark:text-slate-400', 'cursor-not-allowed');
-                sendBtn.classList.remove('bg-emerald-600', 'text-white', 'hover:bg-emerald-700', 'shadow-md');
-            }
-        }
-
-        userInput.addEventListener('input', function() {
-            this.style.height = 'auto';
-            this.style.height = (this.scrollHeight) + 'px';
-            if(this.value === '') this.style.height = 'auto';
-            updateButtonState();
-        });
-
-        userInput.addEventListener('keydown', (e) => {
-            if (e.key === 'Enter' && !e.shiftKey) {
-                e.preventDefault();
-                handleSendMessage(userInput.value);
-            }
-        });
-
-        chatForm.addEventListener('submit', (e) => {
-            e.preventDefault();
-            handleSendMessage(userInput.value);
-        });
-
-        resetBtn.addEventListener('click', () => {
-            if (confirm("تحب نبدأ صفحة جديدة؟")) {
-                location.reload();
-            }
-        });
-
-        // Suggestions Click Handler
-        document.querySelectorAll('.suggestion-btn').forEach(btn => {
-            btn.addEventListener('click', () => {
-                const text = btn.getAttribute('data-text');
-                handleSendMessage(text);
-            });
-        });
-    </script>
+    <div id="root" class="h-full flex flex-col"></div>
+    <script type="module" src="/index.tsx"></script>
 </body>
 </html>
